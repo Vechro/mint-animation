@@ -7,13 +7,22 @@ module Animation {
   ) : Void {
     `
     (() => {
-      console.log(#{keyframes})
-      #{element}.animate(
-      #{keyframes}.map(kf => ({ [kf[0][0][0]]: kf[0][0][1], offset: kf[1] })),
-      {
-        duration: #{encode duration},
-        iterations: #{encode iterations}
+      const mapped = #{keyframes}.map(function ([settings,val]) {
+        const item = {}
+        settings.forEach(function ([key, val]) {
+          item[key] = val
+        })
+
+        return item
       });
+
+      #{element}.animate(
+        mapped,
+        {
+          duration: #{duration},
+          iterations: #{iterations}
+        }
+      );
     })()
     `
   }
