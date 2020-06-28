@@ -1,0 +1,9 @@
+{
+  "name": "anim",
+  "source-directories": [
+    "source"
+  ],
+  "test-directories": [
+    "tests"
+  ]
+}
