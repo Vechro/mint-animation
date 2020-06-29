@@ -3,6 +3,7 @@ component Main {
     with Animation {
       create()
       |> step([{"transform", "rotate(0)"}])
+      |> withOffset(0.3)
       |> step([{"transform", "rotate(15deg)"}])
       |> step([{"transform", "rotate(360deg)"}])
       |> duration(3000)

@@ -21,7 +21,7 @@ module Animation {
         duration: #{current.duration}
       }
 
-      const _ = #{current.options}.map(option => {
+      #{current.options}.map(option => {
         options[option[0]] = option[1]
       });
 
@@ -43,7 +43,11 @@ module Animation {
 
   /* TODO: Check if value is in range [0, 1], check if offset already doesn't exist as the last element in array */
   fun withOffset (offset : Number, current : Animation.Configuration) : Animation.Configuration {
-    { current | keyframes = Array.push([{"offset", Number.toString(offset)}], current.keyframes) }
+    { current | keyframes = Array.push(modifiedLastElement, current.keyframes) }
+  } where {
+    offsetTuple = {"offset", Number.toString(offset)}
+    lastElement = Array.lastWithDefault([], current.keyframes)
+    modifiedLastElement = Array.push(offsetTuple, lastElement)
   }
 
   fun duration (duration : Number, current : Animation.Configuration) : Animation.Configuration {
