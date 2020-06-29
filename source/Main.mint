@@ -1,19 +1,26 @@
 component Main {
-  fun main : Void {
-    Maybe.withDefault(Dom.createElement("div"), Dom.getElementById("test"))
-    |> Animation.animate(
-      [
-        {[{"transform", "rotate(0)"}, {"color", "#000"}], 0},
-        {[{"transform", "rotate(15deg)"}], 0.3},
-        {[{"transform", "rotate(360deg)"}, {"color", "#3fa"}], 1}
-      ],
-      3000,
-      "Infinity")
+  fun main : Animation {
+    with Animation {
+      create()
+      |> step([{"transform", "rotate(0)"}])
+      |> step([{"transform", "rotate(15deg)"}])
+      |> step([{"transform", "rotate(360deg)"}])
+      |> duration(3000)
+      |> iterations("Infinity")
+      |> animate(el)
+    }
+  } where {
+    el =
+      Maybe.withDefault(Dom.createElement("div"), Dom.getElementById("test"))
   }
 
   fun render : Html {
-    <div id="test" onClick={main}>
+    <div
+      id="test"
+      onClick={main}>
+
       "text"
+
     </div>
   }
 }
