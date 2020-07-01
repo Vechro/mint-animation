@@ -83,8 +83,99 @@ module Animation {
     { current | duration = duration }
   }
 
-  fun iterations (amount : String, current : Animation.Configuration) : Animation.Configuration {
-    { current | options = Array.push({"iterations", amount}, current.options) }
+  /* TODO: Check if Iteration::Just is greater than or equal to 0 */
+  fun iterations (
+    amount : Iterations,
+    current : Animation.Configuration
+  ) : Animation.Configuration {
+    { current |
+      options =
+        Array.push(
+          {
+            "iterations", (amount
+            |> Iterations.toString)
+          },
+          current.options)
+    }
+  }
+
+  /* Accepts any number greater than or equal to 0 */
+  fun iterationStart (amount : Number, current : Animation.Configuration) : Animation.Configuration {
+    { current |
+      options =
+        Array.push(
+          {
+            "iterationStart", (amount
+            |> Number.toString)
+          },
+          current.options)
+    }
+  }
+
+  /* The number of milliseconds to delay the start of the animation */
+  fun delay (amount : Number, current : Animation.Configuration) : Animation.Configuration {
+    { current |
+      options =
+        Array.push(
+          {
+            "delay", (amount
+            |> Number.toString)
+          },
+          current.options)
+    }
+  }
+
+  /* The number of milliseconds to delay after the end of an animation */
+  fun endDelay (amount : Number, current : Animation.Configuration) : Animation.Configuration {
+    { current |
+      options =
+        Array.push(
+          {
+            "endDelay", (amount
+            |> Number.toString)
+          },
+          current.options)
+    }
+  }
+
+  /* Defines how the animation moves through its timeline */
+  fun direction (dir : Direction, current : Animation.Configuration) : Animation.Configuration {
+    { current |
+      options =
+        Array.push(
+          {
+            "direction", (dir
+            |> Direction.toString)
+          },
+          current.options)
+    }
+  }
+
+  fun easing (
+    easingType : Easing,
+    current : Animation.Configuration
+  ) : Animation.Configuration {
+    { current |
+      options =
+        Array.push(
+          {
+            "easing", (easingType
+            |> Easing.toString)
+          },
+          current.options)
+    }
+  }
+
+  fun fill (fillType : Fill, current : Animation.Configuration) : Animation.Configuration {
+    { current |
+      options =
+        Array.push(
+          {
+            "fill", (fillType
+            |> Fill.toString)
+          },
+          current.options)
+    }
   }
 
   fun create : Animation.Configuration {

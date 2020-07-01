@@ -13,10 +13,10 @@ component Main {
         create()
         |> step([{"transform", "rotate(0)"}])
         |> withOffset(0.1)
-        |> step([{"transform", "rotate(15deg) translateX(300px)"}])
+        |> step([{"transform", "rotate(15deg) translateX(10em)"}])
         |> step([{"transform", "rotate(360deg)"}])
         |> duration(3000)
-        |> iterations("Infinity")
+        |> iterations(Iterations::Infinity)
         |> animate(el)
       }
   }
@@ -25,15 +25,12 @@ component Main {
     margin: 4em;
     font-family: "Segoe UI", sans-serif;
     font-size: 2em;
-    width: 50%;
+    width: 12em;
   }
 
   fun render : Html {
-    <div::test
-      id="test">
-
+    <div::test id="test">
       "Test"
-
     </div>
   }
 }
