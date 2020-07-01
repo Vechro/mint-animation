@@ -1,5 +1,5 @@
 /* Effectively determines which step to "eat" */
-enum Jump {
+enum Animation.Jump {
   /* Equivalent to `start` and `jump-start` */
   Start
 
@@ -13,13 +13,13 @@ enum Jump {
   Both
 }
 
-module Jump {
-  fun toString (direction : Jump) : String {
+module Animation.Jump {
+  fun toString (direction : Animation.Jump) : String {
     case (direction) {
-      Jump::Start => "start"
-      Jump::End => "end"
-      Jump::None => "jump-none"
-      Jump::Both => "jump-both"
+      Animation.Jump::Start => "start"
+      Animation.Jump::End => "end"
+      Animation.Jump::None => "jump-none"
+      Animation.Jump::Both => "jump-both"
     }
   }
 }

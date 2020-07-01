@@ -1,19 +1,22 @@
-enum Iterations {
-  /* Accepts any number greater than or equal to 0 */
+enum Animation.Iterations {
+  /*
+  Plays the animation n amount of times.
+  The number should be a value greater than or equal to 0.
+  */
   Just(Number)
 
-  /* Infinite amount of iterations */
+  /* Infinite amount of iterations. */
   Infinity
 }
 
-module Iterations {
-  fun toString (iterations : Iterations) : String {
+module Animation.Iterations {
+  fun toString (iterations : Animation.Iterations) : String {
     case (iterations) {
-      Iterations::Just amount =>
+      Animation.Iterations::Just amount =>
         amount
         |> Number.toString
 
-      Iterations::Infinity => "Infinity"
+      Animation.Iterations::Infinity => "Infinity"
     }
   }
 }

@@ -57,7 +57,6 @@ module Animation {
     `
   }
 
-  /* TODO: If offset is in the array, check if value is in range [0, 1] */
   fun step (
     frame : Array(Tuple(String, String)),
     current : Animation.Configuration
@@ -65,7 +64,7 @@ module Animation {
     { current | keyframes = Array.push(frame, current.keyframes) }
   }
 
-  /* TODO: Check if value is in range [0, 1], check if offset already doesn't exist as the last element in array */
+  /* TODO: Check if offset already doesn't exist as the last element in array */
   fun withOffset (offset : Number, current : Animation.Configuration) : Animation.Configuration {
     { current | keyframes = Array.push(Array.push(offsetTuple, lastElement), current.keyframes) }
   } where {
@@ -83,9 +82,8 @@ module Animation {
     { current | duration = duration }
   }
 
-  /* TODO: Check if Iteration::Just is greater than or equal to 0 */
   fun iterations (
-    amount : Iterations,
+    amount : Animation.Iterations,
     current : Animation.Configuration
   ) : Animation.Configuration {
     { current |
@@ -93,13 +91,13 @@ module Animation {
         Array.push(
           {
             "iterations", (amount
-            |> Iterations.toString)
+            |> Animation.Iterations.toString)
           },
           current.options)
     }
   }
 
-  /* Accepts any number greater than or equal to 0 */
+  /* Accepts any number greater than or equal to 0. */
   fun iterationStart (amount : Number, current : Animation.Configuration) : Animation.Configuration {
     { current |
       options =
@@ -112,7 +110,7 @@ module Animation {
     }
   }
 
-  /* The number of milliseconds to delay the start of the animation */
+  /* The number of milliseconds to delay the start of the animation. */
   fun delay (amount : Number, current : Animation.Configuration) : Animation.Configuration {
     { current |
       options =
@@ -125,7 +123,7 @@ module Animation {
     }
   }
 
-  /* The number of milliseconds to delay after the end of an animation */
+  /* The number of milliseconds to delay after the end of an animation. */
   fun endDelay (amount : Number, current : Animation.Configuration) : Animation.Configuration {
     { current |
       options =
@@ -138,21 +136,24 @@ module Animation {
     }
   }
 
-  /* Defines how the animation moves through its timeline */
-  fun direction (dir : Direction, current : Animation.Configuration) : Animation.Configuration {
+  /* Defines how the animation moves through its timeline. */
+  fun direction (
+    dir : Animation.Directions,
+    current : Animation.Configuration
+  ) : Animation.Configuration {
     { current |
       options =
         Array.push(
           {
             "direction", (dir
-            |> Direction.toString)
+            |> Animation.Directions.toString)
           },
           current.options)
     }
   }
 
   fun easing (
-    easingType : Easing,
+    easingType : Animation.Easing,
     current : Animation.Configuration
   ) : Animation.Configuration {
     { current |
@@ -160,19 +161,23 @@ module Animation {
         Array.push(
           {
             "easing", (easingType
-            |> Easing.toString)
+            |> Animation.Easing.toString)
           },
           current.options)
     }
   }
 
-  fun fill (fillType : Fill, current : Animation.Configuration) : Animation.Configuration {
+  /* Defines how the element to which the animation is applied should look when the animation sequence is not actively running. */
+  fun fill (
+    fillType : Animation.Fill,
+    current : Animation.Configuration
+  ) : Animation.Configuration {
     { current |
       options =
         Array.push(
           {
             "fill", (fillType
-            |> Fill.toString)
+            |> Animation.Fill.toString)
           },
           current.options)
     }
@@ -186,6 +191,7 @@ module Animation {
     }
   }
 
+  /* Pauses animation. */
   fun pause (animation : Animation) : Animation {
     `
     (() => {
@@ -195,6 +201,7 @@ module Animation {
     `
   }
 
+  /* Resumes animation. */
   fun play (animation : Animation) : Animation {
     `
     (() => {
@@ -204,6 +211,7 @@ module Animation {
     `
   }
 
+  /* Skips to the end (or start if direction is reversed) of the animation. */
   fun finish (animation : Animation) : Animation {
     `
     (() => {
@@ -213,6 +221,7 @@ module Animation {
     `
   }
 
+  /* Clears all keyframes and aborts animation playback. */
   fun cancel (animation : Animation) : Animation {
     `
     (() => {
@@ -222,6 +231,7 @@ module Animation {
     `
   }
 
+  /* Reverses playback direction. */
   fun reverse (animation : Animation) : Animation {
     `
     (() => {
@@ -231,6 +241,7 @@ module Animation {
     `
   }
 
+  /* Sets animation playback rate. */
   fun setPlaybackRate (rate : Number, animation : Animation) : Animation {
     `
     (() => {
@@ -240,12 +251,14 @@ module Animation {
     `
   }
 
+  /* Returns current animation playback rate. */
   fun getPlaybackRate (animation : Animation) : Number {
     `
     #{animation}.playbackRate
     `
   }
 
+  /* Sets the current time value of the animation in milliseconds, whether running or paused. */
   fun setCurrentTime (time : Number, animation : Animation) : Animation {
     `
     (() => {
@@ -255,18 +268,59 @@ module Animation {
     `
   }
 
-  fun getCurrentTime (animation : Animation) : Number {
+  /*
+  The current time value of the animation in milliseconds, whether running or paused.
+  It can fail to return a value if the animation lacks a timeline, is inactive or hasn't been played yet.
+  */
+  fun getCurrentTime (animation : Animation) : Maybe(Number) {
     `
-    #{animation}.currentTime
+    (() => {
+      const t = #{animation}.currentTime
+      if (t === null) {
+        return #{Maybe::Nothing}
+      } else {
+        return #{Maybe::Just(`t`)}
+      }
+    })()
     `
   }
 
+  /*
+  Commits the end styling state of an animation to the element being animated, even after that animation has been removed.
+  It will cause the end styling state to be written to the element being animated, in the form of properties inside a style attribute.
+  */
   fun commitStyles (animation : Animation) : Animation {
     `
     (() => {
       #{animation}.commitStyles()
       return #{animation}
     })()
+    `
+  }
+
+  /*
+  Indicates whether the animation is currently waiting for an asynchronous operation such as initiating playback or pausing a running animation.
+  Returns `true` if the animation is pending, otherwise `false`.
+  */
+  fun pending (animation : Animation) : Bool {
+    `
+    #{animation}.pending
+    `
+  }
+
+  fun playState (animation : Animation) : Animation.PlayState {
+    `
+    const s = #{animation}.playState
+    switch (s) {
+      case "idle":
+        return ${Animation.PlayState::Idle}
+      case "running":
+        return ${Animation.PlayState::Running}
+      case "paused":
+        return ${Animation.PlayState::Paused}
+      case "finished":
+        return ${Animation.PlayState::Finished}
+    }
     `
   }
 }

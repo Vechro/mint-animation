@@ -16,7 +16,7 @@ component Main {
         |> step([{"transform", "rotate(15deg) translateX(10em)"}])
         |> step([{"transform", "rotate(360deg)"}])
         |> duration(3000)
-        |> iterations(Iterations::Infinity)
+        |> iterations(Animation.Iterations::Infinity)
         |> animate(el)
       }
   }
