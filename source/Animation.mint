@@ -15,6 +15,7 @@ record Animation.Configuration {
 }
 
 module Animation {
+  /* Animates the selected element with the given Animation.Configuration */
   fun animate (
     element : Dom.Element,
     current : Animation.Configuration
@@ -57,6 +58,7 @@ module Animation {
     `
   }
 
+  /* First parameter must be an array comprised of one or more tuples which in turn contain a CSS property and its value. */
   fun step (
     frame : Array(Tuple(String, String)),
     current : Animation.Configuration
@@ -78,10 +80,12 @@ module Animation {
       Array.push(offsetTuple, lastElement)
   }
 
+  /* Sets the total duration of the animation. */
   fun duration (duration : Number, current : Animation.Configuration) : Animation.Configuration {
     { current | duration = duration }
   }
 
+  /* Defines the amount of times to play the animation. */
   fun iterations (
     amount : Animation.Iterations,
     current : Animation.Configuration
@@ -97,7 +101,10 @@ module Animation {
     }
   }
 
-  /* Accepts any number greater than or equal to 0. */
+  /*
+  Describes at what point in the iteration the animation should start.
+  Accepts any float value greater than or equal to 0.
+  */
   fun iterationStart (amount : Number, current : Animation.Configuration) : Animation.Configuration {
     { current |
       options =
@@ -123,7 +130,7 @@ module Animation {
     }
   }
 
-  /* The number of milliseconds to delay after the end of an animation. */
+  /* The number of milliseconds to delay after the end of the animation. */
   fun endDelay (amount : Number, current : Animation.Configuration) : Animation.Configuration {
     { current |
       options =
@@ -152,6 +159,7 @@ module Animation {
     }
   }
 
+  /* Sets the rate of the animation's change over time. */
   fun easing (
     easingType : Animation.Easing,
     current : Animation.Configuration
@@ -308,6 +316,7 @@ module Animation {
     `
   }
 
+  /* Returns the current `playState` of the animation. */
   fun playState (animation : Animation) : Animation.PlayState {
     `
     const s = #{animation}.playState
