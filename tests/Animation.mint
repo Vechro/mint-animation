@@ -53,11 +53,45 @@ suite "Animation" {
           |> Animation.step([{"transform", "rotate(15deg) translateX(10em)"}])
           |> Animation.step([{"transform", "rotate(360deg)"}])
           |> Animation.duration(100)
-          |> Animation.fill(Animation.Fill::Forwards)
           |> Animation.iterations(Animation.Iterations::Just(1))
         }/>
       |> start()
       |> assertTextOf("error", "")
+    }
+  }
+
+  test "Animation styles persist after it ends" {
+    with Test.Html {
+      <Test.Animation
+        config={
+          Animation.create()
+          |> Animation.step([{"color", "rgb(0, 0, 0)"}])
+          |> Animation.step([{"color", "rgb(42, 37, 31)"}])
+          |> Animation.duration(0)
+          |> Animation.fill(Animation.Fill::Forwards)
+          |> Animation.iterations(Animation.Iterations::Just(1))
+        }/>
+      |> start()
+      |> assertCSSOf(
+        "#test",
+        "color",
+        "rgb(42, 37, 31)")
+    }
+  }
+
+  test "NotSupportedError when offset is applied before the first step" {
+    with Test.Html {
+      <Test.Animation
+        config={
+          Animation.create()
+          |> Animation.withOffset(0.1)
+          |> Animation.step([{"transform", "rotate(15deg) translateX(10em)"}])
+          |> Animation.step([{"transform", "rotate(360deg)"}])
+          |> Animation.duration(0)
+          |> Animation.iterations(Animation.Iterations::Just(1))
+        }/>
+      |> start()
+      |> assertTextOf("error", "not supported error")
     }
   }
 }
