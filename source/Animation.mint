@@ -1,13 +1,3 @@
-enum Animation.Error {
-  Unknown
-  TypeError
-  SyntaxError
-  NotSupportedError
-  InvalidStateError
-  AbortError
-  HierarchyRequestError
-}
-
 record Animation.Configuration {
   keyframes : Array(Array(Tuple(String, String))),
   options : Array(Tuple(String, String)),
@@ -319,17 +309,18 @@ module Animation {
   /* Returns the current `playState` of the animation. */
   fun playState (animation : Animation) : Animation.PlayState {
     `
-    const s = #{animation}.playState
-    switch (s) {
-      case "idle":
-        return ${Animation.PlayState::Idle}
-      case "running":
-        return ${Animation.PlayState::Running}
-      case "paused":
-        return ${Animation.PlayState::Paused}
-      case "finished":
-        return ${Animation.PlayState::Finished}
-    }
+    (() => {
+      switch (#{animation}.playState) {
+        case "idle":
+          return #{Animation.PlayState::Idle}
+        case "running":
+          return #{Animation.PlayState::Running}
+        case "paused":
+          return #{Animation.PlayState::Paused}
+        case "finished":
+          return #{Animation.PlayState::Finished}
+      }
+    })()
     `
   }
 }
