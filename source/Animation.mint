@@ -243,7 +243,7 @@ module Animation {
   fun setPlaybackRate (rate : Number, animation : Animation) : Animation {
     `
     (() => {
-      #{animation}.playbackRate = ${rate}
+      #{animation}.playbackRate = #{rate}
       return #{animation}
     })()
     `
@@ -260,7 +260,7 @@ module Animation {
   fun setCurrentTime (time : Number, animation : Animation) : Animation {
     `
     (() => {
-      #{animation}.currentTime = ${time}
+      #{animation}.currentTime = #{time}
       return #{animation}
     })()
     `
