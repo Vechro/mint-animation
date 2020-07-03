@@ -287,7 +287,7 @@ module Animation {
   Commits the end styling state of an animation to the element being animated, even after that animation has been removed.
   It will cause the end styling state to be written to the element being animated, in the form of properties inside a style attribute.
 
-  To be uncommented when Chrome finally supports this feature https://developer.mozilla.org/en-US/docs/Web/API/Animation/commitStyles
+  Uncomment when Chrome finally supports this feature without flags https://developer.mozilla.org/en-US/docs/Web/API/Animation/commitStyles
 
   fun commitStyles (animation : Animation) : Animation {
     `
