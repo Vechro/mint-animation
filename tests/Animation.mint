@@ -88,4 +88,36 @@ suite "Animation" {
       }
     }
   }
+
+  test "Large animation config" {
+    with Test.Html {
+      with Test.Context {
+        of(
+          Animation.create()
+          |> Animation.step([{"transform", "rotate(0)"}, {"color", "#fdb"}])
+          |> Animation.withOffset(0.1)
+          |> Animation.step([{"transform", "rotate(360deg)"}, {"color", "#111"}])
+          |> Animation.duration(100)
+          |> Animation.iterations(Animation.Iterations::Just(10))
+          |> Animation.iterationStart(3.5)
+          |> Animation.delay(300)
+          |> Animation.endDelay(500)
+          |> Animation.direction(Animation.Directions::AlternateReverse)
+          |> Animation.easing(Animation.Easing::EaseInOut)
+          |> Animation.fill(Animation.Fill::Forwards)
+          |> Animation.animate(Dom.createElement("div")))
+        |> then(
+          (result : Result(Animation.Error, Animation)) {
+            case (result) {
+              Result::Ok animation => Promise.resolve(animation)
+
+              Result::Err error =>
+                Promise.reject(
+                  error
+                  |> Animation.Error.toString)
+            }
+          })
+      }
+    }
+  }
 }
