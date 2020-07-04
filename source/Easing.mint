@@ -45,7 +45,7 @@ enum Animation.Easing {
   /*
   Breaks the animation down into a number of equal time intervals.
   The first parameter specifies the number of intervals in the function and should be an integer greater than 0.
-  The second parameter, which is optional, specifies the point at which the change of values occur within the interval.
+  The second parameter specifies the point at which the change of values occur within the interval.
   */
   Steps(Number, Animation.Jump)
 }
